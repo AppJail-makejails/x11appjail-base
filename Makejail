@@ -1,0 +1,6 @@
+ARG x11appjail_from=ghcr.io/appjail-makejails/x11appjail-base
+ARG x11appjail_tag=latest
+
+OPTION start
+OPTION overwrite=force
+OPTION from=${x11appjail_from}:${x11appjail_tag}
