@@ -19,7 +19,7 @@ RUN set -xe; \
     packages=; \
     \
     if [ -n "${IS_X11}" ]; then \
-        packages="xauth xrandr sdorfehs xorg-fonts mesa-dri mesa-libs setxkbmap dunst virtualgl"; \
+        packages="xauth xrandr ratpoison xorg-fonts mesa-dri mesa-libs setxkbmap dunst virtualgl"; \
     fi; \
     \
     pkg update; \
