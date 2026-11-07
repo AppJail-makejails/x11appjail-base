@@ -3,6 +3,7 @@
 set -xe
 
 make -C "$1" BATCH=yes \
+    PACKAGE_BUILDING=yes \
     install-missing-packages
 
 make -C "$1" BATCH=yes \
