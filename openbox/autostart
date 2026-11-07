@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Debugging
+#GDK_SYNCHRONIZE=1 devilspie2 --debug --folder /usr/local/etc/devilspie2 &
+
+devilspie2 --folder /usr/local/etc/devilspie2 &

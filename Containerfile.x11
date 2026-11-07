@@ -1,0 +1,81 @@
+ARG FREEBSD_RELEASE
+
+FROM ghcr.io/appjail-makejails/base:${FREEBSD_RELEASE} AS builder
+
+ARG PORTS_GIT=https://git.freebsd.org/ports.git
+
+RUN set -xe; \
+    \
+    umask 0022; \
+    \
+    pkg update; \
+    pkg install FreeBSD-set-base-jail git-tiny
+
+RUN git clone --depth 1 "${PORTS_GIT}" /usr/ports
+
+WORKDIR /usr/ports
+
+COPY build.sh /build.sh
+
+RUN chmod +x /build.sh
+
+RUN /build.sh x11-wm/devilspie2-devel
+RUN /build.sh x11-themes/ventanas-10
+RUN /build.sh x11-fonts/selawik
+
+RUN pkg repo /tmp/pkg-out
+
+FROM ghcr.io/appjail-makejails/base:${FREEBSD_RELEASE}
+
+ARG NO_PKGCLEAN
+
+LABEL org.opencontainers.image.title="x11appjail base image" \
+    org.opencontainers.image.description="x11appjail base image" \
+    org.opencontainers.image.source="https://github.com/AppJail-makejails/x11appjail-base" \
+    org.opencontainers.image.url="https://github.com/DtxdF/x11appjail" \
+    org.opencontainers.image.vendor="DtxdF" \
+    org.opencontainers.image.authors="Jesús Daniel Colmenares Oviedo <dtxdf@disroot.org>"
+
+COPY --from=builder /tmp/pkg-out/ /tmp/local-repo
+
+RUN mkdir -p /usr/local/etc/pkg/repos
+RUN printf 'local: {\n  url: "file:///tmp/local-repo",\n  priority: 1,\n  enabled: yes\n}\n' > /usr/local/etc/pkg/repos/local.conf
+
+RUN set -xe; \
+    \
+    umask 0022; \
+    \
+    pkg update; \
+    pkg install \
+        FreeBSD-set-base-jail \
+        xdg-utils \
+        xauth \
+        xrandr \
+        openbox \
+        devel/py-pyxdg \
+        xorg-fonts \
+        mesa-dri \
+        mesa-libs \
+        setxkbmap \
+        dunst \
+        virtualgl \
+        devilspie2-devel \
+        ventanas-10 \
+        selawik; \
+    \
+    if [ -z "${NO_PKGCLEAN}" ]; then \
+        pkg clean -a; \
+        rm -rf /var/cache/pkg/*; \
+    fi; \
+    rm -rf /var/db/pkg/repos/*; \
+    rm -rf /tmp/local-repo; \
+    rm -f /usr/local/etc/pkg/repos/local.conf; \
+    \
+# Prevent permission issues when a package is installed there.
+    mkdir -p /usr/local/sbin; \
+    chmod 755 /usr/local/sbin
+
+COPY openbox/* /usr/local/etc/xdg/openbox
+
+RUN mkdir -p /usr/local/etc/devilspie2
+COPY devilspie2/* /usr/local/etc/devilspie2

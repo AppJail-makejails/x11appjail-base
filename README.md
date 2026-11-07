@@ -27,16 +27,15 @@ appjail makejail \
 build:
   variants:
     - tag: 15.1-x11
-      containerfile: Containerfile
+      containerfile: Containerfile.x11
       aliases: ["latest"]
       default: true
       args:
         FREEBSD_RELEASE: "15.1"
-        IS_X11: "1"
         NO_PKGCLEAN: "1"
       cache_dirs: ["pkgcache0:/var/cache/pkg"]
     - tag: 15.1-nox11
-      containerfile: Containerfile
+      containerfile: Containerfile.nox11
       args:
         FREEBSD_RELEASE: "15.1"
         NO_PKGCLEAN: "1"

@@ -3,7 +3,6 @@ ARG FREEBSD_RELEASE
 FROM ghcr.io/appjail-makejails/base:${FREEBSD_RELEASE}
 
 ARG NO_PKGCLEAN
-ARG IS_X11
 
 LABEL org.opencontainers.image.title="x11appjail base image" \
     org.opencontainers.image.description="x11appjail base image" \
@@ -16,14 +15,8 @@ RUN set -xe; \
     \
     umask 0022; \
     \
-    packages=; \
-    \
-    if [ -n "${IS_X11}" ]; then \
-        packages="xauth xrandr ratpoison xorg-fonts mesa-dri mesa-libs setxkbmap dunst virtualgl"; \
-    fi; \
-    \
     pkg update; \
-    pkg install FreeBSD-set-base-jail xdg-utils ${packages}; \
+    pkg install FreeBSD-set-base-jail xdg-utils dunst; \
     \
     if [ -z "${NO_PKGCLEAN}" ]; then \
         pkg clean -a; \
