@@ -19,9 +19,7 @@ COPY build.sh /build.sh
 
 RUN chmod +x /build.sh
 
-RUN /build.sh x11-wm/devilspie2-devel
-RUN /build.sh x11-themes/ventanas-10
-RUN /build.sh x11-fonts/selawik
+RUN /build.sh x11-wm/fastcompmgr
 
 RUN pkg repo /tmp/pkg-out
 
@@ -63,7 +61,7 @@ RUN set -xe; \
         ventanas-10 \
         selawik \
         hsetroot \
-        xcompmgr; \
+        fastcompmgr; \
     \
     if [ -z "${NO_PKGCLEAN}" ]; then \
         pkg clean -a; \
