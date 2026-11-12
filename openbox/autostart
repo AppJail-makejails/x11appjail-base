@@ -1,5 +1,8 @@
 #!/bin/sh
 
+hsetroot -solid "#000000"
+xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55 &
+
 # Debugging
 #GDK_SYNCHRONIZE=1 devilspie2 --debug --folder /usr/local/etc/devilspie2 &
 

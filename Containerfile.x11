@@ -61,7 +61,9 @@ RUN set -xe; \
         virtualgl \
         devilspie2-devel \
         ventanas-10 \
-        selawik; \
+        selawik \
+        hsetroot \
+        xcompmgr; \
     \
     if [ -z "${NO_PKGCLEAN}" ]; then \
         pkg clean -a; \
