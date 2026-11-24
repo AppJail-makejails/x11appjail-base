@@ -1,10 +1,23 @@
 local M = {}
+local NO_FULLSCREEN_FILE = "/usr/local/etc/devilspie2/nofullscreen"
+
+local function no_fullscreen_requested()
+    local f = io.open(NO_FULLSCREEN_FILE, "r")
+    if f then
+        f:close()
+        return true
+    end
+    return false
+end
 
 function M.is_normal()
     return get_window_type() == "WINDOW_TYPE_NORMAL"
 end
 
 function M.can_fullscreen()
+   if no_fullscreen_requested() then
+        return false
+    end
     local actions = get_window_property('_NET_WM_ALLOWED_ACTIONS') or ""
     return actions:find('_NET_WM_ACTION_MAXIMIZE_HORZ', 1, true)
         and actions:find('_NET_WM_ACTION_MAXIMIZE_VERT', 1, true)
